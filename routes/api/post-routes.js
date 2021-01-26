@@ -17,10 +17,9 @@ router.get('/', (req, res) => {
       // which columns we want
       attributes: [
           'id', 
-          'post_url', 
+          'blog_contents', 
           'title', 
-          'created_at',
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'), 'vote_count']
+          'created_at'
     ],
       // join to the User table, notice it is an array of objects
       // if you were joining to another table, that would be another object in the array
@@ -54,10 +53,9 @@ router.get('/:id', (req, res) => {
       },
       attributes: [
           'id', 
-          'post_url', 
+          'blog_contents', 
           'title', 
-          'created_at',
-          [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'), 'vote_count']
+          'created_at'
     ],
       include: [
         {
@@ -89,10 +87,10 @@ router.get('/:id', (req, res) => {
 
 // route to POST a Post
 router.post('/', (req, res) => {
-    // expects {title: 'Taskmaster goes public!', post_url: 'https://taskmaster.com/press', user_id: 1}
+    // expects {title: 'Taskmaster goes public!', blog_contents: 'https://taskmaster.com/press', user_id: 1}
     Post.create({
       title: req.body.title,
-      post_url: req.body.post_url,
+      blog_contents: req.body.blog_contents,
       user_id: req.body.user_id
     })
       .then(dbPostData => res.json(dbPostData))
@@ -102,24 +100,25 @@ router.post('/', (req, res) => {
       });
 });
 
-// route to PUT an upvote on a post: /api/posts/upvote
-router.put('/upvote', (req, res) => {
-    // when user clicks the upvote icon, create an entry in the Vote table
-    // with the userID and postID of the vote
-    // 'upvote' is a custom static method created in models/Post.js
-  Post.upvote(req.body, { Vote })
-  .then(updatedPostData => res.json(updatedPostData))
-  .catch(err => {
-    console.log(err);
-    res.status(400).json(err);
-  });
-});
+// // route to PUT an upvote on a post: /api/posts/upvote
+// router.put('/upvote', (req, res) => {
+//     // when user clicks the upvote icon, create an entry in the Vote table
+//     // with the userID and postID of the vote
+//     // 'upvote' is a custom static method created in models/Post.js
+//   Post.upvote(req.body, { Vote })
+//   .then(updatedPostData => res.json(updatedPostData))
+//   .catch(err => {
+//     console.log(err);
+//     res.status(400).json(err);
+//   });
+// });
 
 // route to update (PUT) a Post's title
 router.put('/:id', (req, res) => {
     Post.update(
       {
-        title: req.body.title
+        title: req.body.title,
+        blog_contents: req.body.blog_contents
       },
       {
         where: {

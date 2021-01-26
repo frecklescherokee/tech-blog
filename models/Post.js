@@ -47,10 +47,7 @@ Post.init(
       },
       blog_contents: {
         type: DataTypes.TEXT,
-        allowNull: false,
-        validate: {
-          isURL: true
-        }
+        allowNull: false
       },
       user_id: {
         type: DataTypes.INTEGER,
