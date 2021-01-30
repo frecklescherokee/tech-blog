@@ -6,9 +6,12 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// allow handlebars helpers functions to be accessed
+const helpers = require('./utils/helpers');
+
 // set Handlebars as this app's template engine with the following 4 lines
 const exphbs = require('express-handlebars');
-const hbs = exphbs.create({});
+const hbs = exphbs.create({ helpers });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
