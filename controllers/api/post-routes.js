@@ -8,9 +8,11 @@ const { Post, User, Vote, Comment } = require('../../models');
 // import Sequelize so we can sum upvotes and return that value when an upvote happens
 const sequelize = require('../../config/connection');
 
+const withAuth = require('../../utils/auth');
 
 
-// get all users
+
+// get all posts
 router.get('/', (req, res) => {
     console.log('======================');
     Post.findAll({
@@ -51,7 +53,7 @@ router.get('/', (req, res) => {
 });
 
 // GET a single Post by ID (findOne)
-router.get('/:id', (req, res) => {
+router.get('/:id', withAuth, (req, res) => {
     Post.findOne({
       where: {
         id: req.params.id
@@ -91,12 +93,12 @@ router.get('/:id', (req, res) => {
 });
 
 // route to POST a Post
-router.post('/', (req, res) => {
+router.post('/', withAuth, (req, res) => {
     // expects {title: 'Taskmaster goes public!', blog_contents: 'https://taskmaster.com/press', user_id: 1}
     Post.create({
       title: req.body.title,
       blog_contents: req.body.blog_contents,
-      user_id: req.body.user_id
+      user_id: req.session.user_id
     })
       .then(dbPostData => res.json(dbPostData))
       .catch(err => {
@@ -119,8 +121,8 @@ router.post('/', (req, res) => {
 //   }
 // });
 
-// route to update (PUT) a Post's title
-router.put('/:id', (req, res) => {
+// route to update (PUT) a Post's title or contents
+router.put('/:id', withAuth, (req, res) => {
     Post.update(
       {
         title: req.body.title,
@@ -146,7 +148,7 @@ router.put('/:id', (req, res) => {
 });
 
 // route to DELETE a Post
-router.delete('/:id', (req, res) => {
+router.delete('/:id', withAuth, (req, res) => {
     Post.destroy({
       where: {
         id: req.params.id

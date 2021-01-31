@@ -3,8 +3,11 @@
     <div class="title">
         <a href="/post/{{id}}" target="_blank">{{title}}</a>
     </div>
+    <div>
+        {{blog_contents}}
+    </div>
     <div class="meta">
-        created by {{user.username}} on
+        - Created by {{user.username}} on
         {{format_date created_at}}
         |
         <a href="/post/{{id}}">{{comments.length}} {{format_plural "comment" comments.length}}</a>

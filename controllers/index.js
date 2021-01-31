@@ -5,13 +5,20 @@
 
 const router = require('express').Router();
 
-const apiRoutes = require('./api');
 
 
+// merge the dashboard router module into the rest of the app with these 2 lines:
+const dashboardRoutes = require('./dashboard-routes.js');
+router.use('/dashboard', dashboardRoutes);
+
+// merge the homepage router module into the rest of the app with these 2 lines:
 const homeRoutes = require('./home-routes.js');
 router.use('/', homeRoutes);
 
+// merge the api router module into the rest of the app with these 2 lines:
+const apiRoutes = require('./api');
 router.use('/api', apiRoutes);
+
 
 router.use((req, res) => {
   res.status(404).end();
